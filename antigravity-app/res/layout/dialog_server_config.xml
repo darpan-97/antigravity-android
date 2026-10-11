@@ -76,7 +76,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="🔒 Connect via Tailscale (100.100.225.42)"
+            android:text="🔒 Auto-Fill Tailscale (100.x.y.z:8080)"
             android:textColor="#3B82F6"
             android:textSize="12sp"
             android:textStyle="bold" />

@@ -3,12 +3,15 @@ import fs from 'node:fs';
 import { exec, execFile } from 'node:child_process';
 import { DatabaseSync } from 'node:sqlite';
 
-const PORT = 8080;
+import os from 'node:os';
+
+const PORT = process.env.PORT || 8080;
 const HOST = '0.0.0.0';
-const BASE = 'C:\\Users\\nitroprezzz\\.gemini\\antigravity';
+const USER_HOME = os.homedir();
+const BASE = process.env.ANTIGRAVITY_DATA_DIR || `${USER_HOME}\\.gemini\\antigravity`;
 const AGENTAPI_PATH = `${BASE}\\bin\\agentapi.bat`;
 const SUMMARIES_DB = `${BASE}\\conversation_summaries.db`;
-let currentId = '087cbb7d-cf6f-4f59-b090-eb901d8afbc1';
+let currentId = '';
 
 const sseClients = new Set();
 
@@ -52,7 +55,7 @@ function entryToMessage(e) {
     return text ? { sender: 'user', content: text.slice(0, 6000), ts } : null;
   }
   if (e.type === 'SYSTEM_MESSAGE' && e.content) {
-    const m = /content=\[MOBILE USER PROMPT from Galaxy S23\]:\s*([\s\S]*?)\s*<\/SYSTEM_MESSAGE>/.exec(e.content);
+    const m = /content=\[MOBILE USER PROMPT(?: from [^\]]+)?\]:\s*([\s\S]*?)\s*<\/SYSTEM_MESSAGE>/.exec(e.content);
     if (m) return { sender: 'user', content: m[1].trim().slice(0, 6000), ts, fromMobile: true };
     return null;
   }
@@ -322,7 +325,7 @@ const server = http.createServer((req, res) => {
       if (!text.trim()) return json(res, 400, { error: 'Message cannot be empty' });
       pendingSince = Date.now(); sawRunning = false;
       setStatus('thinking', 'Antigravity is thinking...');
-      const prompt = `[MOBILE USER PROMPT from Galaxy S23]: ${text}`;
+      const prompt = `[MOBILE USER PROMPT]: ${text}`;
       exec(`"${AGENTAPI_PATH}" send-message ${id} "${escapeForCmd(prompt)}"`, (err, stdout, stderr) => {
         if (err) {
           console.error('[!] agentapi error:', err.message);
@@ -377,12 +380,34 @@ setInterval(pollState, 3000);
 setInterval(refreshProcesses, 8000);
 refreshProcesses();
 convCache = readConversations() || [];
+if (!currentId && convCache.length > 0) {
+  // Default to the most recently modified active conversation
+  currentId = convCache[0].id;
+}
 lastConvJson = JSON.stringify(convCache);
 
+function getTailscaleIp() {
+  const nets = os.networkInterfaces();
+  for (const name of Object.keys(nets)) {
+    for (const net of nets[name]) {
+      if (net.family === 'IPv4' && !net.internal && net.address.startsWith('100.')) {
+        return net.address;
+      }
+    }
+  }
+  return null;
+}
+
 server.listen(PORT, HOST, () => {
+  const tsIp = getTailscaleIp();
   console.log('======================================================================');
   console.log('   ANTIGRAVITY MOBILE BRIDGE SERVER LIVE');
-  console.log(`   Port: ${PORT} | Conversation: ${currentId}`);
+  console.log(`   Port: ${PORT} | Active Conversation: ${currentId}`);
   console.log(`   ${convCache.length} conversations indexed`);
+  if (tsIp) {
+    console.log(`   [🔒 Tailscale] Connect phone to: http://${tsIp}:${PORT}`);
+  } else {
+    console.log(`   [LAN] Connect phone to: http://<your-ip>:${PORT}`);
+  }
   console.log('======================================================================');
 });

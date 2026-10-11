@@ -291,8 +291,14 @@ public class MainActivity extends Activity implements ChatContract.View {
         etToken.setText(currentConfig.getAuthToken());
 
         btnQuickTailscale.setOnClickListener(v -> {
-            etUrl.setText("http://100.100.225.42:8080");
-            Toast.makeText(MainActivity.this, "Set Tailscale address (100.100.225.42)", Toast.LENGTH_SHORT).show();
+            String current = etUrl.getText().toString().trim();
+            if (current.isEmpty() || current.contains("127.0.0.1") || current.contains("localhost")) {
+                etUrl.setText("http://100.");
+                etUrl.setSelection(etUrl.getText().length());
+                Toast.makeText(MainActivity.this, "Enter your Desktop's Tailscale 100.x.y.z IP", Toast.LENGTH_LONG).show();
+            } else if (!current.startsWith("http://") && !current.startsWith("https://")) {
+                etUrl.setText("http://" + current);
+            }
         });
 
         btnDisconnect.setOnClickListener(v -> {
