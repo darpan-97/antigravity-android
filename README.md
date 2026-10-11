@@ -101,6 +101,13 @@ node build_apk.mjs
 
 The output signed APK will be generated at `antigravity-app/antigravity-mobile.apk`.
 
+## 📚 Technical Documentation
+
+- **[Tailscale Remote Setup Guide](docs/TAILSCALE_SETUP.md)**: End-to-end pairing guide for desktop & phone over Tailscale.
+- **[System Architecture](docs/ARCHITECTURE.md)**: Native Android MVP contract, SQLite transactional cache, and SSE reactive stream engine.
+- **[Desktop Protocol Specification](docs/DESKTOP_PROTOCOL.md)**: Analysis of Antigravity's internal language server IPC and RPC endpoints.
+- **[Protocol Analysis & Synthesis](docs/PROTOCOL_ANALYSIS.md)**: Clean architecture blueprint and component contracts.
+
 ---
 
 ## 📄 License
