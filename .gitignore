@@ -1,0 +1,9 @@
+node_modules/
+bin/
+gen/
+*.apk
+*.log
+.env
+asar_dump/
+temp/
+*.tmp

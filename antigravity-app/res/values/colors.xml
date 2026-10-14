@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Background Canvas -->
+    <color name="bg_root">#0D0F12</color>
+    <color name="bg_sidebar">#12151B</color>
+    <color name="bg_surface">#16191F</color>
+    <color name="bg_surface_card">#1A1D25</color>
+    <color name="bg_pill_active">#20242E</color>
+    <color name="border_subtle">#262A34</color>
+    <color name="border_active">#3B4252</color>
+
+    <!-- Chat Messages -->
+    <color name="bg_bubble_user">#1C1F26</color>
+    <color name="border_bubble_user">#2A2E39</color>
+    <color name="bg_bubble_assistant">#0D0F12</color>
+
+    <!-- Typography -->
+    <color name="text_primary">#F3F4F6</color>
+    <color name="text_secondary">#9CA3AF</color>
+    <color name="text_muted">#6B7280</color>
+    <color name="text_sidebar_section">#6B7280</color>
+
+    <!-- Brand & Accent -->
+    <color name="accent_blue">#2563EB</color>
+    <color name="accent_blue_glow">#3B82F6</color>
+    <color name="accent_purple">#8B5CF6</color>
+    <color name="folder_yellow">#EAB308</color>
+    <color name="badge_active">#3B82F6</color>
+
+    <!-- Status Dots -->
+    <color name="status_connected">#10B981</color>
+    <color name="status_connecting">#F59E0B</color>
+    <color name="status_disconnected">#EF4444</color>
+
+    <!-- Legacy aliases -->
+    <color name="accent_primary">#3B82F6</color>
+    <color name="accent_active">#2563EB</color>
+    <color name="bg_card">#1A1D25</color>
+    <color name="bg_bubble_tool">#12151B</color>
+    <color name="input_background">#16191F</color>
+</resources>
